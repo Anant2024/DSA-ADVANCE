@@ -1,0 +1,89 @@
+You are given the root of a binary tree and an integer distance.A pair of two different leaf nodes of a binary tree is said to be good if the length of the shortest path between them is less than or equal to distance.
+
+                                                                                                                                                                                                           Return the number of good leaf node pairs in the tree.
+
+                                                                                                                                                                                                           Example 1 :
+
+    Intuition
+        We can solve this problem by performing a depth - first search(DFS)
+traversal on the binary tree.During the traversal, we keep track of the distances from the current node to its leaves(i.e., nodes without children).At each node, we check if the sum of distances from its left and right children is less than or equal to the target distance.If yes, we increment a counter to record the pair.
+
+                                                                                                                                                                                                                                                                                         Approach Base Cases : If the node is null,
+    return an empty vector{0}.If the node is a leaf(no children), return a vector with the value 1, indicating a distance of 1 from itself.Recursive Calls : Recursively call recur on the left and right child nodes, passing the target distance and the counter reference.Pair Counting : Iterate through the distances(x)
+obtained from the left subtree.Iterate through the distances(y) obtained from the right subtree.
+For each pair (x, y):
+If both x and y are positive (distances from leaves), check if their sum is less than or equal to the target distance. If yes, increment the counter (cnt).
+Building Available Distances:
+Create an empty vector ans to store available distances for the current node.
+Iterate through the distances (x)
+obtained from the left subtree.If x is positive and less than the target distance, add x + 1(distance from the current node)to ans.This represents the distance available from the current node to its child.Return : Return the vector ans containing available distances from the current node.Complexity
+                                                                                                                                                                                                                      Time complexity : o(N ^ 2)
+                                                                                                                                                                                                                                            Space complexity : o(n)
+                                                                                                                                                                                                                                                                   Code
+                                                                                                                                                                                                                                                               /**
+                                                                                                                                                                                                                                                                * Definition for a binary tree node.
+                                                                                                                                                                                                                                                                * struct TreeNode {
+                                                                                                                                                                                                                                                                *     int val;
+                                                                                                                                                                                                                                                                *     TreeNode *left;
+                                                                                                                                                                                                                                                                *     TreeNode *right;
+                                                                                                                                                                                                                                                                *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+                                                                                                                                                                                                                                                                *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+                                                                                                                                                                                                                                                                *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+                                                                                                                                                                                                                                                                * };
+                                                                                                                                                                                                                                                                */
+                                                                                                                                                                                                                                                               class Solution
+{
+public:
+    vector<int> recur(TreeNode *root, int distance, int &cnt)
+    {
+
+        if (!root)
+            return {0};
+
+        if (!root->left && !root->right)
+            return {1};
+
+        vector<int> left = recur(root->left, distance, cnt);
+        vector<int> right = recur(root->right, distance, cnt);
+
+        for (int x : left)
+        {
+            for (int y : right)
+            {
+                if (x > 0 && y > 0)
+                {
+                    if (x + y <= distance)
+                        cnt++;
+                }
+            }
+        }
+
+        vector<int> ans;
+        for (int x : left)
+        {
+            if (x > 0 && x < distance)
+            {
+                ans.push_back(x + 1);
+            }
+        }
+
+        for (int x : right)
+        {
+            if (x > 0 && x < distance)
+            {
+                ans.push_back(x + 1);
+            }
+        }
+
+        return ans;
+    }
+
+    int countPairs(TreeNode *root, int distance)
+    {
+
+        int cnt = 0;
+        recur(root, distance, cnt);
+
+        return cnt;
+    }
+};

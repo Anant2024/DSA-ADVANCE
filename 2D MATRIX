@@ -1,0 +1,7 @@
+  50    0    0    0    0    0
+   60    0    0    0    0    0
+   10   70    0    0    0    0
+    0   30   60    0    0    0
+    0    0   30   70    0    0
+    0    0    0   10   45    0
+    0    0    0    0   15   50          Given row and column sum find the matrix (daily problem 20-07-2024)
